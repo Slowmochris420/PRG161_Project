@@ -10,9 +10,14 @@ namespace PRG161_Project
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello world!");
-            Console.WriteLine();
-            //comment
+            //Fixed Prices of book categories
+            const int spellTomes = 40;
+            const int enchantedScrolls = 25;
+            const int magicalNovels = 25;
+
+            //Arrays to store customer names and book names
+            string[] customerNames = {"David Haslhof", "Harry Potter", "Michael Scott"};
+            string[] books = {"Magic for dummies", "Book of potions", "Dark magic"};
         }
     }
 }
