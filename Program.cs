@@ -19,7 +19,7 @@ namespace PRG161_Project
             string[] customerNames = {"David Haslhof", "Harry Potter", "Michael Scott"};
             string[] books = {"Magic for dummies", "Book of potions", "Dark magic"};
 
-            Console.WriteLine("Hello world!");
+            Console.WriteLine();
         }
     }
 }
