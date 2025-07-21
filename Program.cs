@@ -16,8 +16,8 @@ namespace PRG161_Project
             const int magicalNovels = 25;
 
             //Arrays to store customer names and book names
-            string[] customerNames = {"David Haslhof", "Harry Potter", "Michael Scott"};
-            string[] books = {"Magic for dummies", "Book of potions", "Dark magic"};
+            string[] customerNames = new string[10];
+            string[] books = new string[10];
 
             Console.WriteLine();
         }
