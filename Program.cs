@@ -15,14 +15,49 @@ namespace PRG161_Project
             const int enchantedScrolls = 25;
             const int magicalNovels = 25;
 
-            //Arrays to store customer names and book names
-            string[] customerNames = new string[10];
-            string[] books = new string[10];
+            //Lists to store customer names and book names
+            List<string> customerNames = new List<string>();
+            Dictionary<string, string> magicBooks = new Dictionary<string, string>();
 
-            string numCoupon = Coupons(3);
+            int option;
+
+            Console.WriteLine(@"
+ What would you like to do?
+ Enter the number to the corresponding option:
+ ============================================
+ 1. Add a new customer
+ 2. Add a new book to the library
+ 3. Take order.
+ ============================================
+");
+
+            option = int.Parse(Console.ReadLine());
+
+            switch (option)
+            {
+                case 1:
+                    string newCustomer;
+                    Console.WriteLine("What is the Customer's name?");
+                    newCustomer = Console.ReadLine();
+                    customerNames.Add(newCustomer);
+                    Console.WriteLine($"{newCustomer} was added successfully!");
+                    break;
+                case 2:
+                    string newBook;
+                    string category;
+                    Console.WriteLine("What is the new Book's name?");
+                    newBook = Console.ReadLine();
+                    Console.WriteLine("What category does this book fall under?");
+                    category = Console.ReadLine();
+                    magicBooks.Add(newBook, category);
+                    Console.WriteLine($"{newBook} was added successfully!");
+                    break;
+                default:
+                    break;
+            }
 
 
-            
+
         }
 
         static string Coupons(int numRentals)
