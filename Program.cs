@@ -26,8 +26,14 @@ namespace PRG161_Project
             const int magicalNovels = 25;
 
             //Lists to store customer names and book names
-            List<string> customerNames = new List<string>();
-            Dictionary<string, string> magicBooks = new Dictionary<string, string>();
+            List<string> customerNames = new List<string>();    //Stores the names of the cutsomers
+            List<string> toRent = new List<string>();   //stores which ever book the user enters during checkout
+            Dictionary<string, string> magicBooks = new Dictionary<string, string>(); 
+            /*
+            Dictionary magicBooks
+            The TKey represents the name of the book
+            while the TValue represents the category of the TKey(Book name)
+            */
 
             while (true)
             {
