@@ -8,8 +8,18 @@ namespace PRG161_Project
 {
     internal class Program
     {
+
+        enum Choices
+        {
+            Add_customer = 1,
+            Add_book,
+            Checkout
+        }
+
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.White;   //Set default font color to white
+
             //Fixed Prices of book categories
             const int spellTomes = 40;
             const int enchantedScrolls = 25;
@@ -27,11 +37,14 @@ namespace PRG161_Project
  What would you like to do?
  Enter the number to the corresponding option:
  ============================================
- 1. Add a new customer
- 2. Add a new book to the library
- 3. Take order.
- ============================================
 ");
+                int counter = 1;
+
+                foreach (string item in Enum.GetNames(typeof(Choices)))
+                {
+                    Console.WriteLine($"{counter}. {item}");
+                    counter++;
+                }
 
                 option = int.Parse(Console.ReadLine());
 
@@ -52,7 +65,9 @@ namespace PRG161_Project
                         {
                             Console.Clear();
                             customerNames.Add(newCustomer);
+                            Console.ForegroundColor = ConsoleColor.Green;   //Change success message to green font
                             Console.WriteLine($"{newCustomer} was added successfully!");
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                         break;
                     case 2: //Code to add a new book to the magicBooks Dictionary along with their specified category
@@ -83,6 +98,9 @@ namespace PRG161_Project
                                 Console.WriteLine($"{category} is not a valid book category.\nPlease try again.");
                             }
                         }
+                        break;
+                    case 3:
+                        //Check out option.
                         break;
                     default:
                         Console.Clear();
