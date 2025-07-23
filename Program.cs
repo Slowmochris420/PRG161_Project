@@ -19,9 +19,11 @@ namespace PRG161_Project
             List<string> customerNames = new List<string>();
             Dictionary<string, string> magicBooks = new Dictionary<string, string>();
 
-            int option;
+            while (true)
+            {
+                int option;
 
-            Console.WriteLine(@"
+                Console.WriteLine(@"
  What would you like to do?
  Enter the number to the corresponding option:
  ============================================
@@ -31,30 +33,62 @@ namespace PRG161_Project
  ============================================
 ");
 
-            option = int.Parse(Console.ReadLine());
+                option = int.Parse(Console.ReadLine());
 
-            switch (option)
-            {
-                case 1:
-                    string newCustomer;
-                    Console.WriteLine("What is the Customer's name?");
-                    newCustomer = Console.ReadLine();
-                    customerNames.Add(newCustomer);
-                    Console.WriteLine($"{newCustomer} was added successfully!");
-                    break;
-                case 2:
-                    string newBook;
-                    string category;
-                    Console.WriteLine("What is the new Book's name?");
-                    newBook = Console.ReadLine();
-                    Console.WriteLine("What category does this book fall under?");
-                    category = Console.ReadLine();
-                    magicBooks.Add(newBook, category);
-                    Console.WriteLine($"{newBook} was added successfully!");
-                    break;
-                default:
-                    break;
+                switch (option)
+                {
+                    case 1: //Code to add a new custommer to the customerNames List
+                        Console.Clear();
+                        string newCustomer;
+                        Console.WriteLine("What is the Customer's name?");
+                        newCustomer = Console.ReadLine();
+
+                        if (customerNames.Contains(newCustomer)) //Check if the customer entered doesn't already exist in the List
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"The customer {newCustomer} already exists.");
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            customerNames.Add(newCustomer);
+                            Console.WriteLine($"{newCustomer} was added successfully!");
+                        }
+                        break;
+                    case 2: //Code to add a new book to the magicBooks Dictionary along with their specified category
+                        string newBook;
+                        string category;
+
+                        Console.Clear();
+                        Console.WriteLine("What is the new Book's name?");
+                        newBook = Console.ReadLine();
+                        if (magicBooks.ContainsKey(newBook))
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"The book {newBook} is already in the library.");
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"What category does {newBook} fall under?");
+                            category = Console.ReadLine();
+                            if (category.ToLower() == "spell tomes" || category.ToLower() == "enchanted scrolls" || category.ToLower() == "magical novels")
+                            {
+                                magicBooks.Add(newBook, category);  //Book name = TKey, category = TValue
+                                Console.WriteLine($"{newBook} was added successfully under catergory: {category}!");
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine($"{category} is not a valid book category.\nPlease try again.");
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
+            
 
 
 
