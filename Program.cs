@@ -85,6 +85,8 @@ namespace PRG161_Project
                         }
                         break;
                     default:
+                        Console.Clear();
+                        Console.WriteLine("That is not an avalible option.");
                         break;
                 }
             }
