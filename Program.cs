@@ -120,7 +120,7 @@ namespace PRG161_Project
 
         }
 
-        static string Coupons(int numRentals)
+        public static string Coupons(int numRentals)
         {
             if (numRentals >= 10 && numRentals <= 24)
             {
