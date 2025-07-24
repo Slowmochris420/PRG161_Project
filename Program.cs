@@ -13,7 +13,8 @@ namespace PRG161_Project
         {
             Add_customer = 1,
             Add_book,
-            Checkout
+            Checkout,
+            Exit
         }
 
         static void Main(string[] args)
@@ -105,8 +106,17 @@ namespace PRG161_Project
                             }
                         }
                         break;
-                    case 3:
-                        //Check out option.
+                    case 3: //Check out
+                        //Owethu's code
+
+                        //Chris's code
+
+                        //Warick's code
+                        break;
+                    case 4:
+                        Console.Clear();
+                        Console.WriteLine("Have a nice day :)");
+                        Environment.Exit(0);
                         break;
                     default:
                         Console.Clear();
