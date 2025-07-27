@@ -27,14 +27,16 @@ namespace PRG161_Project
             const int magicalNovels = 25;
 
             //Lists to store customer names and book names
-            List<string> customerNames = new List<string>();    //Stores the names of the cutsomers
+            Dictionary<string, DateTime> customerNames = new Dictionary<string, DateTime>();  //Stores the names of the customers and their date if register
             List<string> toRent = new List<string>();   //stores which ever book the user enters during checkout
-            Dictionary<string, string> magicBooks = new Dictionary<string, string>(); 
+            Dictionary<string, string> magicBooks = new Dictionary<string, string>();
             /*
             Dictionary magicBooks
             The TKey represents the name of the book
             while the TValue represents the category of the TKey(Book name)
             */
+
+            DateTime date = DateTime.Now;
 
             while (true)
             {
@@ -63,7 +65,7 @@ namespace PRG161_Project
                         Console.WriteLine("What is the Customer's name?");
                         newCustomer = Console.ReadLine();
 
-                        if (customerNames.Contains(newCustomer)) //Check if the customer entered doesn't already exist in the List
+                        if (customerNames.ContainsKey(newCustomer)) //Check if the customer entered doesn't already exist in the List
                         {
                             Console.Clear();
                             Console.WriteLine($"The customer {newCustomer} already exists.");
@@ -71,7 +73,7 @@ namespace PRG161_Project
                         else
                         {
                             Console.Clear();
-                            customerNames.Add(newCustomer);
+                            customerNames.Add(newCustomer, date);
                             Console.ForegroundColor = ConsoleColor.Green;   //Change success message to green font
                             Console.WriteLine($"{newCustomer} was added successfully!");
                             Console.ForegroundColor = ConsoleColor.White;
@@ -110,9 +112,9 @@ namespace PRG161_Project
                         bool isLoyal = false; //To check if the customer is in the customerNames list
                         Console.WriteLine("Checkout for:");
                         string custName = Console.ReadLine();
-                        foreach (string item in customerNames)
+                        foreach (KeyValuePair<string, DateTime>  item in customerNames)
                         {
-                            if (custName == item)   //Are they on the loyalty system?
+                            if (custName == item.Key)   //Are they on the loyalty system?
                             {
                                 isLoyal = true;
                                 break; //Break out of the loop when customer is found
@@ -123,8 +125,10 @@ namespace PRG161_Project
                         {
                             //Owethu's code
 
-                            //Chris's code
-                            Console.WriteLine("Enter the customer's Number of Rentals:");
+                            //Determine the number of Reward rentals the customer gets
+                            Console.WriteLine("Enter the customer's Number of Rentals:"); 
+                            int numRentals = int.Parse(Console.ReadLine());
+                            int rewardRentals = Coupons(numRentals);
 
                             //Warick's code
 
@@ -173,6 +177,13 @@ namespace PRG161_Project
             {
                 return 8;
             }
+
+            
         }
+
+        //owethu's function
+
+        //warick's function
+
     }
 }
