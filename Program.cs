@@ -107,22 +107,47 @@ namespace PRG161_Project
                         }
                         break;
                     case 3: //Check out
-                        //Owethu's code
+                        bool isLoyal = false; //To check if the customer is in the customerNames list
+                        Console.WriteLine("Checkout for:");
+                        string custName = Console.ReadLine();
+                        foreach (string item in customerNames)
+                        {
+                            if (custName == item)   //Are they on the loyalty system?
+                            {
+                                isLoyal = true;
+                                break; //Break out of the loop when customer is found
+                            }
+                        }
 
-                        //Chris's code
+                        if (isLoyal) //Is on the system (i.e. is on the customerNames list)
+                        {
+                            //Owethu's code
 
-                        //Warick's code
+                            //Chris's code
+                            Console.WriteLine("Enter the customer's Number of Rentals:");
+
+                            //Warick's code
+
+                            break;
+                        }
+                        else  //Is not on the system (i.e. is not on the customerNames list)
+                        {
+                            //Do not ask for coupons / Bonuses etc.
+                            //Just Ask which books to check out.
+                        }
                         break;
-                    case 4:
+                    case 4: //Close the program
                         Console.Clear();
-                        Console.WriteLine("Have a nice day :)");
+                        Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                        Console.WriteLine(" --- Have a nice day :) --- ");
+                        Console.BackgroundColor = ConsoleColor.Black;
                         Environment.Exit(0);
                         break;
                     default:
                         Console.Clear();
                         Console.WriteLine("That is not an avalible option.");
                         break;
-                }
+                    }
             }
             
 
@@ -130,23 +155,23 @@ namespace PRG161_Project
 
         }
 
-        public static string Coupons(int numRentals)
+        public static int Coupons(int numRentals)
         {
             if (numRentals >= 10 && numRentals <= 24)
             {
-                return "You recieved 1 Reward Rental.";
+                return 1;
             }
             else if (numRentals > 24 && numRentals <= 49)
             {
-                return "You recieved 2 Reward Rental.";
+                return 2;
             }
             else if (numRentals > 49 && numRentals <= 74)
             {
-                return "You recieved 4 Reward Rental.";
+                return 4;
             }
             else
             {
-                return "You recieved 8 Reward Rental.";
+                return 8;
             }
         }
     }
