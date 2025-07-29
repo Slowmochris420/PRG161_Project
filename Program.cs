@@ -17,6 +17,8 @@ namespace PRG161_Project
             Exit
         }
 
+        public static Dictionary<string, string> magicBooks = new Dictionary<string, string>();
+
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.White;   //Set default font color to white
@@ -27,18 +29,18 @@ namespace PRG161_Project
             const int magicalNovels = 25;
 
             //Lists to store customer names and book names
-            Dictionary<string, DateTime> customerNames = new Dictionary<string, DateTime>();  //Stores the names of the customers and their date if register
-            List<string> toRent = new List<string>();   //stores which ever book the user enters during checkout
-            Dictionary<string, string> magicBooks = new Dictionary<string, string>();
+            Dictionary<string, int> customerNames = new Dictionary<string, int>();  //Stores the names of the customers and their date if register
+            List<string> cart = new List<string>();   //stores which ever book the user enters during checkout
+            
             /*
             Dictionary magicBooks
             The TKey represents the name of the book
             while the TValue represents the category of the TKey(Book name)
             */
 
-            DateTime date = DateTime.Now;
+            
 
-            while (true)
+            while (true) //Program Loops back to the Menu
             {
                 int option;
 
@@ -72,6 +74,8 @@ namespace PRG161_Project
                         }
                         else
                         {
+                            int date = DateTime.Now.Year; //Saves date when new customer was entered
+
                             Console.Clear();
                             customerNames.Add(newCustomer, date);
                             Console.ForegroundColor = ConsoleColor.Green;   //Change success message to green font
@@ -94,11 +98,13 @@ namespace PRG161_Project
                         else
                         {
                             Console.Clear();
+
                             Console.WriteLine($"What category does {newBook} fall under?");
                             category = Console.ReadLine();
+
                             if (category.ToLower() == "spell tomes" || category.ToLower() == "enchanted scrolls" || category.ToLower() == "magical novels")
                             {
-                                magicBooks.Add(newBook, category);  //Book name = TKey, category = TValue
+                                magicBooks.Add(newBook, category.ToLower());  //Book name = TKey, category = TValue
                                 Console.WriteLine($"{newBook} was added successfully under catergory: {category}!");
                             }
                             else
@@ -112,25 +118,64 @@ namespace PRG161_Project
                         bool isLoyal = false; //To check if the customer is in the customerNames list
                         Console.WriteLine("Checkout for:");
                         string custName = Console.ReadLine();
-                        foreach (KeyValuePair<string, DateTime>  item in customerNames)
+
+                        int registerYear = 0;
+
+                        foreach (KeyValuePair<string, int>  item in customerNames)
                         {
-                            if (custName == item.Key)   //Are they on the loyalty system?
+                            if (custName == item.Key)   //Are they on the loyalty system? (Are they found in the customerNames dictionary)
                             {
+                                registerYear = item.Value;
                                 isLoyal = true;
                                 break; //Break out of the loop when customer is found
                             }
                         }
 
+                        string bookChosen;
+                        int amountBeforeDiscount = 0;
+                        double discountPercentage = 0;
+
+                        do
+                        {
+                            Console.WriteLine("Enter the book names one at a time to be rented:");
+                            Console.WriteLine("Enter 0 to stop adding books to cart");
+                            bookChosen = Console.ReadLine();
+
+                            if (bookChosen != "0") //Decides if the program will skip the add to cart  section
+                            {
+                                int checkNum = Total(bookChosen); //checkNum stores the value returned before its added to the total, if it returns -1
+                                                                  //it means the book name entered wasn't found int the magic book dictionary and
+                                                                  //therefore won't be added to the cart
+
+                                if (checkNum != -1) //if the book is in the magic book dictionary
+                                {
+                                    amountBeforeDiscount += checkNum;
+                                    cart.Add(bookChosen);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid book name");
+                                }
+                            }
+                        } while (bookChosen != "0"); //Stops until the user enters a 0
+
                         if (isLoyal) //Is on the system (i.e. is on the customerNames list)
                         {
                             //Owethu's code
+                            int yearsRegistered = DateTime.Now.Year - registerYear; //Subtract the present year by the year the customer registered the
+                                                                                    //get the period the customer was registered
+                            discountPercentage = CalcDiscount(yearsRegistered);
 
                             //Determine the number of Reward rentals the customer gets
                             Console.WriteLine("Enter the customer's Number of Rentals:"); 
                             int numRentals = int.Parse(Console.ReadLine());
-                            int rewardRentals = Coupons(numRentals);
+
+                            int rewardRentals = Coupons(numRentals);    //call Coupons function
 
                             //Warick's code
+                            
+
+                            string reward = MagicalBonus(yearsRegistered, numRentals);
 
                             break;
                         }
@@ -139,6 +184,8 @@ namespace PRG161_Project
                             //Do not ask for coupons / Bonuses etc.
                             //Just Ask which books to check out.
                         }
+
+                        Console.WriteLine(amountBeforeDiscount);
                         break;
                     case 4: //Close the program
                         Console.Clear();
@@ -159,6 +206,7 @@ namespace PRG161_Project
 
         }
 
+        //Function to determine the number of free rentals the customer gets(Coupons)
         public static int Coupons(int numRentals)
         {
             if (numRentals >= 10 && numRentals <= 24)
@@ -181,9 +229,86 @@ namespace PRG161_Project
             
         }
 
-        //owethu's function
+        //Function to determine what magical bonus the customer gets(Magical bonus)
+        public static string MagicalBonus(int yearsRegistered,int numOfRentals)
+        {
+            string reward = "";
+            if (yearsRegistered > 5 && numOfRentals < 25)
+            {
+                reward = "You don’t qualify for magical bonus.";
+            }
+            else if ((yearsRegistered >= 5 && yearsRegistered < 10) && (numOfRentals >= 25 && numOfRentals < 50))
+            {
+                reward = "You qualify for 1 bronze tier book!";
+            }
+            else if ((yearsRegistered >= 10 && yearsRegistered < 15) && (numOfRentals >= 50 && numOfRentals < 75))
+            {
+                reward = "You qualify for 3 bronze and 1 silver tier books!";
+            }
+            else if (yearsRegistered >= 15 && numOfRentals >= 75)
+            {
+                reward = "You qualify for 5 bronze, 2 silver and 1 gold tier books!";
+            }
 
-        //warick's function
+            return reward;
+        }
 
+        //Function that returns the discount percentage according to the period the customer has registered
+        public static double CalcDiscount(int yearsRegistered)
+        {
+            double discountPercentage = 0.0;
+
+            if (yearsRegistered == 4)
+            {
+                discountPercentage = 0.05;
+            }
+            else if (yearsRegistered >=5 && yearsRegistered <= 9)
+            {
+                discountPercentage = 0.1;
+            }
+            else if (yearsRegistered >= 10 && yearsRegistered <= 14)
+            {
+                discountPercentage = 0.2;
+            }
+            else if (yearsRegistered >= 15)
+            {
+                discountPercentage = 0.35;
+            }
+
+            return discountPercentage;
+        }
+
+        //Function to identify price based on the book catergory
+        public static int Total(string nameOfBook)
+        {
+            int price = 0;
+
+            foreach (KeyValuePair<string, string> item in magicBooks)
+            {
+                if (nameOfBook == item.Key)   //Is the book in the magicBook dictionary?
+                {
+                    if (item.Value == "spell tomes")   //Check wat the category is of that book to determine the price of it
+                    {
+                        price = 40;
+                    }
+                    else if (item.Value == "enchanted scrolls")
+                    {
+                        price = 25;
+                    }
+                    else if (item.Value == "magic novels")
+                    {
+                        price = 25;
+                    }
+                }
+                else
+                {
+                    price = -1;
+                }
+            }
+
+            
+
+            return price;
+        }
     }
 }
