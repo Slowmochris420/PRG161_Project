@@ -44,7 +44,7 @@ namespace PRG161_Project
             magicBooks.Add("Scroll of Whispers", "enchanted scrolls");
             magicBooks.Add("Chronicles of Arcanum", "magic novels");
             magicBooks.Add("Mystic Grimoire", "spell tomes");
-            magicBooks.Add("Tales of the Aether", "magic novel");
+            magicBooks.Add("Tales of the Aether", "magic novels");
 
             while (true) //Program Loops back to the Menu
             {
@@ -141,7 +141,6 @@ namespace PRG161_Project
                         }
                         break;
                     case 3: //Check out
-                        bool isLoyal = false; //To check if the customer is in the customerNames list
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Checkout for:");
@@ -165,6 +164,8 @@ namespace PRG161_Project
                         int rewardRentals = 0;
                         string bonus = "";
 
+
+                        Console.Clear();
                         AddToCart(); //Keeps asking what book the customer wants to rent and adds the price of each book to totalBeforeDiscount
                             
                         int yearsRegistered = DateTime.Now.Year - registerYear; //Subtract the present year by the year the customer registered the
@@ -203,7 +204,7 @@ namespace PRG161_Project
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine($"Before discount         \t{amountBeforeDiscount.ToString("C", currencyRands),5}");
                         Console.WriteLine($"After discount          \t{amountAfterDiscount.ToString("C", currencyRands),5}");
-                        Console.WriteLine($"Free rentals coupon     \t{rewardRentals.ToString("C", currencyRands),5}");
+                        Console.WriteLine($"Free rentals coupon     \t{rewardRentals,5}");
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("-------------------------------------");
                         Console.ForegroundColor = ConsoleColor.White;
@@ -224,7 +225,7 @@ namespace PRG161_Project
                         break;
                     case 4: //Close the program
                         Console.Clear();
-                        Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine(" --- Have a nice day :) --- ");
                         Console.BackgroundColor = ConsoleColor.Black;
                         Environment.Exit(0);
@@ -336,14 +337,13 @@ namespace PRG161_Project
                     {
                         price = 25;
                     }
+                    
                 }
-                else
-                {
-                    price = -1;
-                }
+                //else
+                //{
+                //    price = -1;       Breaks validation, why???
+                //}
             }
-
-            
 
             return price;
         }
@@ -364,18 +364,23 @@ namespace PRG161_Project
 
                 if (bookChosen != "0") //Decides if the program will skip the add to cart  section
                 {
-                    int checkNum = Total(bookChosen); //checkNum stores the value returned before its added to the total, if it returns -1
+                    int checkNum = 0;
+                    checkNum = Total(bookChosen);     //checkNum stores the value returned before its added to the total, if it returns -1
                                                       //it means the book name entered wasn't found int the magic book dictionary and
                                                       //therefore won't be added to the cart
 
                     if (checkNum != -1) //if the book is in the magic book dictionary
                     {
+                        Console.Clear();
                         amountBeforeDiscount += checkNum;
                         cart.Add(bookChosen, checkNum);
                     }
-                    else
+                    else //Book name is not in the dictionary
                     {
-                        Console.WriteLine("Invalid book name");
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red; 
+                        Console.WriteLine("Invalid book name\n");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
             } while (bookChosen != "0"); //Stops until the user enters a 0
