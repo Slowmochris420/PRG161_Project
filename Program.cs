@@ -17,28 +17,33 @@ namespace PRG161_Project
             Exit
         }
 
-        public static Dictionary<string, string> magicBooks = new Dictionary<string, string>();
+
+        //Global variables-----------------------------------------------------------------------
+        public static Dictionary<string, string> magicBooks = new Dictionary<string, string>(); //stores the book name and it's category
+        public static Dictionary<string, int> cart = new Dictionary<string, int>();   //stores which ever book the user enters during checkout whith thier prices
+        public static int amountBeforeDiscount = 0; //Total price for all books in cart list (Used in the method AddToCart)
+        //---------------------------------------------------------------------------------------
 
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.White;   //Set default font color to white
 
-            //Fixed Prices of book categories
-            const int spellTomes = 40;
-            const int enchantedScrolls = 25;
-            const int magicalNovels = 25;
+            //Stores the names of the customers and their year if register
+            Dictionary<string, int> customerNames = new Dictionary<string, int>();
 
-            //Lists to store customer names and book names
-            Dictionary<string, int> customerNames = new Dictionary<string, int>();  //Stores the names of the customers and their date if register
-            List<string> cart = new List<string>();   //stores which ever book the user enters during checkout
-            
-            /*
-            Dictionary magicBooks
-            The TKey represents the name of the book
-            while the TValue represents the category of the TKey(Book name)
-            */
+            //Added Names to customerNames dictionary
+            customerNames.Add("Margaret Ellison", 1957);
+            customerNames.Add("Darius Mitchell", 1983);
+            customerNames.Add("Leila Romero", 2001);
+            customerNames.Add("Connor Blakewood", 2016);
+            customerNames.Add("Ayana Chen", 2023);
 
-            
+            //Added Names to magicBooks dictionary
+            magicBooks.Add("The Ember Codex", "spell tomes");
+            magicBooks.Add("Scroll of Whispers", "enchanted scrolls");
+            magicBooks.Add("Chronicles of Arcanum", "magic novel");
+            magicBooks.Add("Mystic Grimoire", "spell tomes");
+            magicBooks.Add("Tales of the Aether", "magic novel");
 
             while (true) //Program Loops back to the Menu
             {
@@ -47,15 +52,16 @@ namespace PRG161_Project
                 Console.WriteLine(@"
  What would you like to do?
  Enter the number to the corresponding option:
- ============================================
-");
+ ============================================");
                 int counter = 1;
 
                 foreach (string item in Enum.GetNames(typeof(Choices)))
                 {
-                    Console.WriteLine($"{counter}. {item}");
+                    Console.WriteLine($" {counter}. {item}");
                     counter++;
                 }
+
+                Console.WriteLine(" ============================================");
 
                 option = int.Parse(Console.ReadLine());
 
@@ -90,12 +96,12 @@ namespace PRG161_Project
                         Console.Clear();
                         Console.WriteLine("What is the new Book's name?");
                         newBook = Console.ReadLine();
-                        if (magicBooks.ContainsKey(newBook))
+                        if (magicBooks.ContainsKey(newBook))    //Is the book already in the magic books dictionary?
                         {
                             Console.Clear();
                             Console.WriteLine($"The book {newBook} is already in the library.");
                         }
-                        else
+                        else //if the book isn't in the magic books dictionary
                         {
                             Console.Clear();
 
@@ -116,6 +122,7 @@ namespace PRG161_Project
                         break;
                     case 3: //Check out
                         bool isLoyal = false; //To check if the customer is in the customerNames list
+                        Console.Clear();
                         Console.WriteLine("Checkout for:");
                         string custName = Console.ReadLine();
 
@@ -125,67 +132,69 @@ namespace PRG161_Project
                         {
                             if (custName == item.Key)   //Are they on the loyalty system? (Are they found in the customerNames dictionary)
                             {
-                                registerYear = item.Value;
+                                registerYear = item.Value;  //Storing the year the customer registered to
+                                                            //help calculate how long they've been registered
                                 isLoyal = true;
                                 break; //Break out of the loop when customer is found
                             }
                         }
 
-                        string bookChosen;
-                        int amountBeforeDiscount = 0;
+                        
                         double discountPercentage = 0;
+                        int rewardRentals = 0;
+                        string bonus = "";
 
-                        do
-                        {
-                            Console.WriteLine("Enter the book names one at a time to be rented:");
-                            Console.WriteLine("Enter 0 to stop adding books to cart");
-                            bookChosen = Console.ReadLine();
-
-                            if (bookChosen != "0") //Decides if the program will skip the add to cart  section
-                            {
-                                int checkNum = Total(bookChosen); //checkNum stores the value returned before its added to the total, if it returns -1
-                                                                  //it means the book name entered wasn't found int the magic book dictionary and
-                                                                  //therefore won't be added to the cart
-
-                                if (checkNum != -1) //if the book is in the magic book dictionary
-                                {
-                                    amountBeforeDiscount += checkNum;
-                                    cart.Add(bookChosen);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Invalid book name");
-                                }
-                            }
-                        } while (bookChosen != "0"); //Stops until the user enters a 0
+                        AddToCart(); //Keeps asking what book the customer wants to rent and adds the price of each book to totalBeforeDiscount
 
                         if (isLoyal) //Is on the system (i.e. is on the customerNames list)
                         {
-                            //Owethu's code
+                            //
                             int yearsRegistered = DateTime.Now.Year - registerYear; //Subtract the present year by the year the customer registered the
                                                                                     //get the period the customer was registered
-                            discountPercentage = CalcDiscount(yearsRegistered);
+                            discountPercentage = CalcDiscount(yearsRegistered); //call Discount function
+
+                            Console.Clear();
 
                             //Determine the number of Reward rentals the customer gets
                             Console.WriteLine("Enter the customer's Number of Rentals:"); 
                             int numRentals = int.Parse(Console.ReadLine());
 
-                            int rewardRentals = Coupons(numRentals);    //call Coupons function
+                            rewardRentals = Coupons(numRentals);    //call Coupons function
 
                             //Warick's code
+                            bonus = MagicalBonus(yearsRegistered, numRentals);  //Call magical bonus function
+
                             
-
-                            string reward = MagicalBonus(yearsRegistered, numRentals);
-
-                            break;
                         }
                         else  //Is not on the system (i.e. is not on the customerNames list)
                         {
                             //Do not ask for coupons / Bonuses etc.
                             //Just Ask which books to check out.
+                            AddToCart();
                         }
 
-                        Console.WriteLine(amountBeforeDiscount);
+                        //Display the customer's reciept
+
+                        Console.Clear();
+                        double amountAfterDiscount = amountBeforeDiscount - (amountBeforeDiscount * discountPercentage);
+
+                        Console.WriteLine("Magic books library");
+                        Console.WriteLine("=================================");
+                        foreach (KeyValuePair<string, int> item in cart)
+                        {
+                            Console.WriteLine($"{item.Key}          \t{item.Value,5}");
+                        }
+                        Console.WriteLine("---------------------------------");
+                        Console.WriteLine($"Before discount         \tR{amountBeforeDiscount,5}");
+                        Console.WriteLine($"After discount          \tR{amountAfterDiscount,5}");
+                        Console.WriteLine($"Free rentals coupon     \tR{rewardRentals,5}");
+                        Console.WriteLine("---------------------------------");
+                        Console.WriteLine($"Magical Bonus: \n{bonus}");
+                        Console.WriteLine("=================================");
+
+                        Console.ReadKey();
+                        Console.Clear();
+
                         break;
                     case 4: //Close the program
                         Console.Clear();
@@ -198,13 +207,15 @@ namespace PRG161_Project
                         Console.Clear();
                         Console.WriteLine("That is not an avalible option.");
                         break;
-                    }
+                }
             }
             
 
 
 
         }
+
+        //==========================================================================================================
 
         //Function to determine the number of free rentals the customer gets(Coupons)
         public static int Coupons(int numRentals)
@@ -300,15 +311,47 @@ namespace PRG161_Project
                         price = 25;
                     }
                 }
-                else
-                {
-                    price = -1;
-                }
+                //else
+                //{
+                //    price = -1;
+                //}
             }
 
             
 
             return price;
         }
+
+
+        //Method that Keeps asking what book the customer wants to rent and adds the price of each book to totalBeforeDiscount
+        public static void AddToCart()
+        {
+
+            string bookChosen = "";
+            do
+            {
+                Console.WriteLine("Enter the book names one at a time to be rented:");
+                Console.WriteLine("Enter 0 to stop adding books to cart");
+                bookChosen = Console.ReadLine();
+
+                if (bookChosen != "0") //Decides if the program will skip the add to cart  section
+                {
+                    int checkNum = Total(bookChosen); //checkNum stores the value returned before its added to the total, if it returns -1
+                                                      //it means the book name entered wasn't found int the magic book dictionary and
+                                                      //therefore won't be added to the cart
+
+                    if (checkNum != -1) //if the book is in the magic book dictionary
+                    {
+                        amountBeforeDiscount += checkNum;
+                        cart.Add(bookChosen, checkNum);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid book name");
+                    }
+                }
+            } while (bookChosen != "0"); //Stops until the user enters a 0
+        }
+
     }
 }
