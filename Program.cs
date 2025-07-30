@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace PRG161_Project
 {
@@ -41,7 +42,7 @@ namespace PRG161_Project
             //Added Names to magicBooks dictionary
             magicBooks.Add("The Ember Codex", "spell tomes");
             magicBooks.Add("Scroll of Whispers", "enchanted scrolls");
-            magicBooks.Add("Chronicles of Arcanum", "magic novel");
+            magicBooks.Add("Chronicles of Arcanum", "magic novels");
             magicBooks.Add("Mystic Grimoire", "spell tomes");
             magicBooks.Add("Tales of the Aether", "magic novel");
 
@@ -49,10 +50,12 @@ namespace PRG161_Project
             {
                 int option;
 
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine(@"
  What would you like to do?
  Enter the number to the corresponding option:
  ============================================");
+                
                 int counter = 1;
 
                 foreach (string item in Enum.GetNames(typeof(Choices)))
@@ -63,6 +66,8 @@ namespace PRG161_Project
 
                 Console.WriteLine(" ============================================");
 
+                Console.ForegroundColor = ConsoleColor.White;
+
                 option = int.Parse(Console.ReadLine());
 
                 switch (option)
@@ -70,13 +75,17 @@ namespace PRG161_Project
                     case 1: //Code to add a new custommer to the customerNames List
                         Console.Clear();
                         string newCustomer;
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("What is the Customer's name?");
+                        Console.ForegroundColor = ConsoleColor.White;
                         newCustomer = Console.ReadLine();
 
                         if (customerNames.ContainsKey(newCustomer)) //Check if the customer entered doesn't already exist in the List
                         {
                             Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine($"The customer {newCustomer} already exists.");
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                         else
                         {
@@ -85,6 +94,7 @@ namespace PRG161_Project
                             Console.Clear();
                             customerNames.Add(newCustomer, date);
                             Console.ForegroundColor = ConsoleColor.Green;   //Change success message to green font
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"{newCustomer} was added successfully!");
                             Console.ForegroundColor = ConsoleColor.White;
                         }
@@ -94,36 +104,48 @@ namespace PRG161_Project
                         string category;
 
                         Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("What is the new Book's name?");
+                        Console.ForegroundColor = ConsoleColor.White;
                         newBook = Console.ReadLine();
                         if (magicBooks.ContainsKey(newBook))    //Is the book already in the magic books dictionary?
                         {
                             Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine($"The book {newBook} is already in the library.");
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                         else //if the book isn't in the magic books dictionary
                         {
                             Console.Clear();
 
+                            Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.WriteLine($"What category does {newBook} fall under?");
+                            Console.ForegroundColor = ConsoleColor.White;
                             category = Console.ReadLine();
 
                             if (category.ToLower() == "spell tomes" || category.ToLower() == "enchanted scrolls" || category.ToLower() == "magical novels")
                             {
                                 magicBooks.Add(newBook, category.ToLower());  //Book name = TKey, category = TValue
+                                Console.ForegroundColor = ConsoleColor.Green;
                                 Console.WriteLine($"{newBook} was added successfully under catergory: {category}!");
+                                Console.ForegroundColor = ConsoleColor.White;
                             }
                             else
                             {
                                 Console.Clear();
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{category} is not a valid book category.\nPlease try again.");
+                                Console.ForegroundColor = ConsoleColor.White;
                             }
                         }
                         break;
                     case 3: //Check out
                         bool isLoyal = false; //To check if the customer is in the customerNames list
                         Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Checkout for:");
+                        Console.ForegroundColor = ConsoleColor.White;
                         string custName = Console.ReadLine();
 
                         int registerYear = 0;
@@ -134,7 +156,6 @@ namespace PRG161_Project
                             {
                                 registerYear = item.Value;  //Storing the year the customer registered to
                                                             //help calculate how long they've been registered
-                                isLoyal = true;
                                 break; //Break out of the loop when customer is found
                             }
                         }
@@ -145,54 +166,59 @@ namespace PRG161_Project
                         string bonus = "";
 
                         AddToCart(); //Keeps asking what book the customer wants to rent and adds the price of each book to totalBeforeDiscount
-
-                        if (isLoyal) //Is on the system (i.e. is on the customerNames list)
-                        {
-                            //
-                            int yearsRegistered = DateTime.Now.Year - registerYear; //Subtract the present year by the year the customer registered the
-                                                                                    //get the period the customer was registered
-                            discountPercentage = CalcDiscount(yearsRegistered); //call Discount function
-
-                            Console.Clear();
-
-                            //Determine the number of Reward rentals the customer gets
-                            Console.WriteLine("Enter the customer's Number of Rentals:"); 
-                            int numRentals = int.Parse(Console.ReadLine());
-
-                            rewardRentals = Coupons(numRentals);    //call Coupons function
-
-                            //Warick's code
-                            bonus = MagicalBonus(yearsRegistered, numRentals);  //Call magical bonus function
-
                             
-                        }
-                        else  //Is not on the system (i.e. is not on the customerNames list)
-                        {
-                            //Do not ask for coupons / Bonuses etc.
-                            //Just Ask which books to check out.
-                            AddToCart();
-                        }
+                        int yearsRegistered = DateTime.Now.Year - registerYear; //Subtract the present year by the year the customer registered the
+                                                                                //get the period the customer was registered
+                        discountPercentage = CalcDiscount(yearsRegistered); //call Discount function
+
+                        Console.Clear();
+
+                        //Determine the number of Reward rentals the customer gets
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Enter the customer's Number of Rentals:");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        int numRentals = int.Parse(Console.ReadLine());
+
+                        rewardRentals = Coupons(numRentals);    //call Coupons function
+
+                        bonus = MagicalBonus(yearsRegistered, numRentals);  //Call magical bonus function
+                        
 
                         //Display the customer's reciept
 
                         Console.Clear();
                         double amountAfterDiscount = amountBeforeDiscount - (amountBeforeDiscount * discountPercentage);
+                        CultureInfo currencyRands = new CultureInfo("en-ZA");
 
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("Magic books library");
-                        Console.WriteLine("=================================");
-                        foreach (KeyValuePair<string, int> item in cart)
+                        Console.WriteLine("=====================================");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        foreach (KeyValuePair<string, int> item in cart)    //Display all the book names and prices from the cart
                         {
-                            Console.WriteLine($"{item.Key}          \t{item.Value,5}");
+                            Console.WriteLine($"{item.Key}          \t{item.Value.ToString("C", currencyRands),5}");
                         }
-                        Console.WriteLine("---------------------------------");
-                        Console.WriteLine($"Before discount         \tR{amountBeforeDiscount,5}");
-                        Console.WriteLine($"After discount          \tR{amountAfterDiscount,5}");
-                        Console.WriteLine($"Free rentals coupon     \tR{rewardRentals,5}");
-                        Console.WriteLine("---------------------------------");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("-------------------------------------");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine($"Before discount         \t{amountBeforeDiscount.ToString("C", currencyRands),5}");
+                        Console.WriteLine($"After discount          \t{amountAfterDiscount.ToString("C", currencyRands),5}");
+                        Console.WriteLine($"Free rentals coupon     \t{rewardRentals.ToString("C", currencyRands),5}");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("-------------------------------------");
+                        Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine($"Magical Bonus: \n{bonus}");
-                        Console.WriteLine("=================================");
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("=====================================");
+                        Console.ForegroundColor = ConsoleColor.White;
 
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine("\npress any key to exit to menu....");
+                        Console.ForegroundColor = ConsoleColor.White;
                         Console.ReadKey();
+
+                        cart.Clear();   //Clear the cart once the reciept it complete
+
                         Console.Clear();
 
                         break;
@@ -330,8 +356,10 @@ namespace PRG161_Project
             string bookChosen = "";
             do
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Enter the book names one at a time to be rented:");
                 Console.WriteLine("Enter 0 to stop adding books to cart");
+                Console.ForegroundColor = ConsoleColor.White;
                 bookChosen = Console.ReadLine();
 
                 if (bookChosen != "0") //Decides if the program will skip the add to cart  section
