@@ -337,10 +337,10 @@ namespace PRG161_Project
                         price = 25;
                     }
                 }
-                //else
-                //{
-                //    price = -1;
-                //}
+                else
+                {
+                    price = -1;
+                }
             }
 
             
