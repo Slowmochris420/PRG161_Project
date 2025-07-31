@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.ComponentModel.Design;
 
 namespace PRG161_Project
 {
@@ -69,6 +70,7 @@ namespace PRG161_Project
                 Console.ForegroundColor = ConsoleColor.White;
 
                 option = int.Parse(Console.ReadLine());
+
 
                 switch (option)
                 {
@@ -156,6 +158,10 @@ namespace PRG161_Project
                                 registerYear = item.Value;  //Storing the year the customer registered to
                                                             //help calculate how long they've been registered
                                 break; //Break out of the loop when customer is found
+                            }else if (custName != item.Key)
+                            {
+                                Console.WriteLine("no");
+
                             }
                         }
 
@@ -165,7 +171,7 @@ namespace PRG161_Project
                         string bonus = "";
 
 
-                        Console.Clear();
+                        //Console.Clear();
                         AddToCart(); //Keeps asking what book the customer wants to rent and adds the price of each book to totalBeforeDiscount
                             
                         int yearsRegistered = DateTime.Now.Year - registerYear; //Subtract the present year by the year the customer registered the
@@ -339,14 +345,17 @@ namespace PRG161_Project
                     {
                         price = 25;
                     }
-                    
-                }
-                //else
-                //{
-                //    price = -1;       Breaks validation, why???
-                //}
-            }
 
+                    break;
+                    
+                } else if (nameOfBook != item.Key)
+                {
+                    price = -1;
+                    Console.Clear();
+                    break;
+                }
+            }
+            
             return price;
         }
 
@@ -358,7 +367,7 @@ namespace PRG161_Project
             string bookChosen = "";
             do
             {
-                Console.Clear();
+                
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\nEnter the book names one at a time to be rented:");
                 Console.WriteLine("Enter 0 to stop adding books to cart");
