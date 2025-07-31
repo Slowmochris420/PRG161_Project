@@ -36,15 +36,15 @@ namespace PRG161_Project
             customerNames.Add("Margaret Ellison", 1957);
             customerNames.Add("Darius Mitchell", 1983);
             customerNames.Add("Leila Romero", 2001);
-            customerNames.Add("Connor Blakewood", 2016);
+            customerNames.Add("Connor", 2016);
             customerNames.Add("Ayana Chen", 2023);
 
             //Added Names to magicBooks dictionary
-            magicBooks.Add("The Ember Codex", "spell tomes");
+            magicBooks.Add("Codex", "spell tomes");
             magicBooks.Add("Scroll of Whispers", "enchanted scrolls");
             magicBooks.Add("Chronicles of Arcanum", "magic novels");
             magicBooks.Add("Mystic Grimoire", "spell tomes");
-            magicBooks.Add("Tales of the Aether", "magic novels");
+            magicBooks.Add("Aether", "magic novels");
 
             while (true) //Program Loops back to the Menu
             {
@@ -232,7 +232,9 @@ namespace PRG161_Project
                         break;
                     default:
                         Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("That is not an avalible option.");
+                        Console.ForegroundColor = ConsoleColor.White;
                         break;
                 }
             }
@@ -356,8 +358,9 @@ namespace PRG161_Project
             string bookChosen = "";
             do
             {
+                Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Enter the book names one at a time to be rented:");
+                Console.WriteLine("\nEnter the book names one at a time to be rented:");
                 Console.WriteLine("Enter 0 to stop adding books to cart");
                 Console.ForegroundColor = ConsoleColor.White;
                 bookChosen = Console.ReadLine();
@@ -374,6 +377,8 @@ namespace PRG161_Project
                         Console.Clear();
                         amountBeforeDiscount += checkNum;
                         cart.Add(bookChosen, checkNum);
+
+                        
                     }
                     else //Book name is not in the dictionary
                     {
